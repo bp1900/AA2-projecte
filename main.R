@@ -8,11 +8,11 @@ setwd("D:/UPC/3R/AA2/AA2-projecte/")
 path = "data/training_set"
 
 classes <- list.files(path)
-train <- data.frame(matrix(nrow = 0, ncol = 772))
-colnames(train) <- paste0("X", 1:772)
+x_train <- matrix(nrow = 90*10, ncol = 771)
+y_train <- c()
 
 # noves features -> histogrames de color + mitjana + sd
-# search for max sizes to pad
+count = 1
 for (i in 1:length(classes)) {
   path_class = paste(path, classes, sep = '/')
   file_list <- list.files(path_class[i])
@@ -32,20 +32,22 @@ for (i in 1:length(classes)) {
     gstd = sd(g)
     bstd = sd(b)
     
-    vec <- c(classes[i], rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
-    train <- rbind(train, vec)
+    y_train <- c(y_train, classes[i])
+    x_train[count, ] <- c(rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
+    count = count + 1
   }
 }
-colnames(train) <- paste0("X", 1:772)
-train$X1 <- as.factor(train$X1)
-save(train, file = "train.RData")
+y_train <- as.factor(y_train)
+save(y_train, x_train, file = "train.RData")
 
 
 path = "data/test_set"
 classes <- list.files(path)
 
-test <- data.frame(matrix(nrow = 0, ncol = 772))
+x_test <- matrix(nrow = 10*10, ncol = 771)
+y_test <- c()
 
+count = 1
 for (i in 1:length(classes)) {
   path_class = paste(path, classes, sep = '/')
   file_list <- list.files(path_class[i])
@@ -65,10 +67,12 @@ for (i in 1:length(classes)) {
     gstd = sd(g)
     bstd = sd(b)
     
-    vec <- c(classes[i], rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
-    test <- rbind(test, vec)
+    y_test <- c(y_test, classes[i])
+    x_test[count, ] <- c(rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
+    count = count + 1
   }
 }
-colnames(test) <- paste0("X", 1:772)
-test$X1 <- as.factor(test$X1)
-save(test, file = "test.RData")
+
+y_test <- as.factor(y_test)
+
+save(y_test, x_test, file = "test.RData")
