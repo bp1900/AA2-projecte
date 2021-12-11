@@ -43,7 +43,7 @@ cat("\t")
 cat(Cs)
 cat("\n")
 for (ker in kernels) {
-  cat(k)
+  cat(ker)
   cat(" ")
   for(c in Cs) {
     error_svm <- train.svm.kCV(ker, c)
