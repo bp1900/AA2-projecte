@@ -3,12 +3,17 @@ library(e1071)
 setwd("D:/UPC/3R/AA2/AA2-projecte/")
 load("train.RData") 
 load("test.RData")
+library(caret)
 
 N <- dim(x_train)[1]
 k <- 3
 folds <- sample(rep(1:k, length=N), N, replace=FALSE) 
 
 valid.error <- rep(0,k)
+
+#Un cop tens el millor model el avaluas amb les dades de validacio separades
+
+M <-dim(x_test)[1]
 
 train.svm.kCV <- function (which.kernel, mycost)
 {
@@ -26,19 +31,32 @@ train.svm.kCV <- function (which.kernel, mycost)
            RBF   ={model <- svm(train, y_tra, type="C-classification", probability = T, cost=mycost, kernel="radial", scale = F)},
            stop("Enter one of 'linear', 'poly.2', 'poly.3', 'radial'"))
     
-     pred <- predict(model,valid)
+    pred <- predict(model,valid)
+    
+    #compute validation error for part 'i'
+    valid.error[i] <- sum(pred != y_val)/length(y_val)
 
-     #compute validation error for part 'i'
-     valid.error[i] <- sum(pred != y_val)/length(y_val)
   }
+  pred1 <- predict(model,x_test)
+  m<-confusionMatrix(y_test, pred1)
+  print(which.kernel)
+  print(mycost)
+  print(m)
+  valerr <-sum(pred1!= y_test)/length(y_test)
+  
   # return average validation error
-  sum(valid.error)/length(valid.error)
+  print('val_error: ')
+  print(valerr)
+  #return (sum(valid.error)/length(valid.error))
+  
+  
+  
 }
 
 Cs = c(0.01, 0.1, 0.5, 1, 10)
-kernels = c("linear", "RBF")
+kernels = c("linear", "RBF", "poly.2", "poly.3")
 
-sink('results.txt')
+sink('matriu1.txt')
 cat("\t")
 cat(Cs)
 cat("\n")
