@@ -1,78 +1,27 @@
-library(e1071)
 library(kernlab)
-library(jpeg)
 library(imager)
-library(data.table)
+library(xtable)
+library(caret)
+options(scipen = 999)
 
-setwd("D:/UPC/3R/AA2/AA2-projecte/")
-path = "data/training_set"
+source("process_data.R")
+# Read Data, only if it doesnt exist
+if (!file.exists('data/train.RData')) read_data(train = T)
+if (!file.exists('data/test.RData')) read_data(train = F)
+# clear workspace
+rm(list = ls())
+load("data/train.RData")
+load("data/test.RData")
 
-classes <- list.files(path)
-x_train <- matrix(nrow = 90*10, ncol = 771)
-y_train <- c()
-
-# noves features -> histogrames de color + mitjana + sd
-count = 1
-for (i in 1:length(classes)) {
-  path_class = paste(path, classes, sep = '/')
-  file_list <- list.files(path_class[i])
-  for (j in 1:length(file_list)) {
-    print(j)
-    temp_data <- load.image(paste(path_class[i], file_list[j], sep = '/'))
-    r = R(temp_data)
-    g = G(temp_data)
-    b = B(temp_data)
-    rhist = (hist(r, seq(0, 1, length = 256), plot = FALSE))$density
-    ghist = (hist(g, seq(0, 1, length = 256), plot = FALSE))$density
-    bhist = (hist(b, seq(0, 1, length = 256), plot = FALSE))$density
-    rmean = mean(r)
-    gmean = mean(g)
-    bmean = mean(b)
-    rstd = sd(r)
-    gstd = sd(g)
-    bstd = sd(b)
-    
-    y_train <- c(y_train, classes[i])
-    x_train[count, ] <- c(rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
-    count = count + 1
-  }
-}
-y_train <- as.factor(y_train)
-save(y_train, x_train, file = "train.RData")
-
-
-path = "data/test_set"
-classes <- list.files(path)
-
-x_test <- matrix(nrow = 10*10, ncol = 771)
-y_test <- c()
-
-count = 1
-for (i in 1:length(classes)) {
-  path_class = paste(path, classes, sep = '/')
-  file_list <- list.files(path_class[i])
-  for (j in 1:length(file_list)) {
-    print(j)
-    temp_data <- load.image(paste(path_class[i], file_list[j], sep = '/'))
-    r = R(temp_data)
-    g = G(temp_data)
-    b = B(temp_data)
-    rhist = (hist(r, seq(0, 1, length = 256), plot = FALSE))$density
-    ghist = (hist(g, seq(0, 1, length = 256), plot = FALSE))$density
-    bhist = (hist(b, seq(0, 1, length = 256), plot = FALSE))$density
-    rmean = mean(r)
-    gmean = mean(g)
-    bmean = mean(b)
-    rstd = sd(r)
-    gstd = sd(g)
-    bstd = sd(b)
-    
-    y_test <- c(y_test, classes[i])
-    x_test[count, ] <- c(rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
-    count = count + 1
-  }
-}
-
-y_test <- as.factor(y_test)
-
-save(y_test, x_test, file = "test.RData")
+# Fits an SVM
+source("svm.R")
+Cs = c(0.01, 0.1, 0.5, 1, 2, 10, 20, 50, 100)
+kernels = c("vanilladot", "rbfdot", "polydot", "logdot", 
+            "laplacedot", "mix_rbfdot_polydot", "mix_rbfdot_logdot",
+            "mix_logdot_polydot")
+hyperparams <- list(
+  'mix' = c(0.2, 0.4, 0.5, 0.6, 0.8),
+  'sigma' = c(1e-4, 1e-3, 1e-2, 1e-1, 1, 10),
+  'degree' = c(2, 3, 4, 5)
+)
+fit_models(kernels, Cs)

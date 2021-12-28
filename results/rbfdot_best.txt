@@ -1,0 +1,88 @@
+Confusion Matrix and Statistics
+
+                               Reference
+Prediction                      beaches bus dinosaurs elephants flowers foods
+  beaches                             5   2         0         1       0     0
+  bus                                 0  10         0         0       0     0
+  dinosaurs                           0   0        10         0       0     0
+  elephants                           0   0         0         9       0     0
+  flowers                             0   0         0         0       9     0
+  foods                               0   1         0         0       1     6
+  horses                              0   0         0         0       1     0
+  monuments                           0   1         0         0       0     0
+  mountains_and_snow                  3   0         0         0       0     0
+  peolpe_and_villages_in_Africa       0   0         0         0       0     0
+                               Reference
+Prediction                      horses monuments mountains_and_snow
+  beaches                            0         0                  1
+  bus                                0         0                  0
+  dinosaurs                          0         0                  0
+  elephants                          1         0                  0
+  flowers                            0         0                  0
+  foods                              0         1                  0
+  horses                             9         0                  0
+  monuments                          0         8                  0
+  mountains_and_snow                 0         0                  6
+  peolpe_and_villages_in_Africa      0         0                  0
+                               Reference
+Prediction                      peolpe_and_villages_in_Africa
+  beaches                                                   1
+  bus                                                       0
+  dinosaurs                                                 0
+  elephants                                                 0
+  flowers                                                   1
+  foods                                                     1
+  horses                                                    0
+  monuments                                                 1
+  mountains_and_snow                                        1
+  peolpe_and_villages_in_Africa                            10
+
+Overall Statistics
+                                               
+               Accuracy : 0.82                 
+                 95% CI : (0.7305, 0.8897)     
+    No Information Rate : 0.15                 
+    P-Value [Acc > NIR] : < 0.00000000000000022
+                                               
+                  Kappa : 0.8                  
+                                               
+ Mcnemar's Test P-Value : NA                   
+
+Statistics by Class:
+
+                     Class: beaches Class: bus Class: dinosaurs
+Sensitivity                  0.6250     0.7143              1.0
+Specificity                  0.9457     1.0000              1.0
+Pos Pred Value               0.5000     1.0000              1.0
+Neg Pred Value               0.9667     0.9556              1.0
+Prevalence                   0.0800     0.1400              0.1
+Detection Rate               0.0500     0.1000              0.1
+Detection Prevalence         0.1000     0.1000              0.1
+Balanced Accuracy            0.7853     0.8571              1.0
+                     Class: elephants Class: flowers Class: foods Class: horses
+Sensitivity                    0.9000         0.8182       1.0000        0.9000
+Specificity                    0.9889         0.9888       0.9574        0.9889
+Pos Pred Value                 0.9000         0.9000       0.6000        0.9000
+Neg Pred Value                 0.9889         0.9778       1.0000        0.9889
+Prevalence                     0.1000         0.1100       0.0600        0.1000
+Detection Rate                 0.0900         0.0900       0.0600        0.0900
+Detection Prevalence           0.1000         0.1000       0.1000        0.1000
+Balanced Accuracy              0.9444         0.9035       0.9787        0.9444
+                     Class: monuments Class: mountains_and_snow
+Sensitivity                    0.8889                    0.8571
+Specificity                    0.9780                    0.9570
+Pos Pred Value                 0.8000                    0.6000
+Neg Pred Value                 0.9889                    0.9889
+Prevalence                     0.0900                    0.0700
+Detection Rate                 0.0800                    0.0600
+Detection Prevalence           0.1000                    0.1000
+Balanced Accuracy              0.9335                    0.9071
+                     Class: peolpe_and_villages_in_Africa
+Sensitivity                                        0.6667
+Specificity                                        1.0000
+Pos Pred Value                                     1.0000
+Neg Pred Value                                     0.9444
+Prevalence                                         0.1500
+Detection Rate                                     0.1000
+Detection Prevalence                               0.1000
+Balanced Accuracy                                  0.8333
