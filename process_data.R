@@ -1,9 +1,10 @@
-read_data <- function(train = T) {
+# hist.eq <- function(im) as.cimg(ecdf(im)(im),dim=dim(im))
+read_data <- function(n_bins = 2**8, train = T) {
   if (train) {path = "data/training_set"; n = 90}
   else {path = "data/test_set"; n = 10}
   
   classes <- list.files(path)
-  x <- matrix(nrow = n*10, ncol = 771)
+  x <- matrix(nrow = n*10, ncol = n_bins*2)
   y <- c()
   
   # noves features -> histogrames de color + mitjana + sd
@@ -14,21 +15,24 @@ read_data <- function(train = T) {
     for (j in 1:length(file_list)) {
       print(j)
       temp_data <- load.image(paste(path_class[i], file_list[j], sep = '/'))
-      r = R(temp_data)
-      g = G(temp_data)
-      b = B(temp_data)
-      rhist = (hist(r, seq(0, 1, length = 256), plot = FALSE))$density
-      ghist = (hist(g, seq(0, 1, length = 256), plot = FALSE))$density
-      bhist = (hist(b, seq(0, 1, length = 256), plot = FALSE))$density
-      rmean = mean(r)
-      gmean = mean(g)
-      bmean = mean(b)
-      rstd = sd(r)
-      gstd = sd(g)
-      bstd = sd(b)
+      # cn <- imsplit(temp_data, "c")
+      # temp_data <- map_il(cn, hist.eq)
+      # temp_data <- imappend(temp_data, "c")
+      RGB = R(temp_data) + G(temp_data) + B(temp_data)
+      r = R(temp_data)/RGB
+      g = G(temp_data)/RGB
+      rhist = (hist(r, seq(0, 1, length = n_bins + 1), plot = FALSE))$density
+      ghist = (hist(g, seq(0, 1, length = n_bins + 1), plot = FALSE))$density
+      # rmean = mean(r)
+      # gmean = mean(g)
+      # bmean = mean(b)
+      # rstd = sd(r)
+      # gstd = sd(g)
+      # bstd = sd(b)
       
       y <- c(y, classes[i])
-      x[count, ] <- c(rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
+      # x[count, ] <- c(rmean, gmean, bmean, rstd, gstd, bstd, rhist, ghist, bhist)
+      x[count, ] <- c(rhist, ghist)
       count = count + 1
     }
   }
