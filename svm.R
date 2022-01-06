@@ -36,7 +36,7 @@ mix_logdot_gihdot <- function(x, y) {
 mix_polydot_gihdot <- function(x, y) {
   prod <- crossprod(x, y)^degree
   gih <- gihdot(x, y)
-  return(lambda*rbf + (1 - lambda)*gih)
+  return(lambda*prod + (1 - lambda)*gih)
 }
 class(mix_rbfdot_polydot) <- "kernel"
 class(mix_logdot_polydot) <- "kernel"
@@ -117,7 +117,7 @@ fit_models <- function(kernels, Cs) {
   VAL_err <- df # test error
   PARAMS <- df # best hyperparameters
   CV_err <- data.frame(matrix(999, nrow = length(kernels), ncol = length(Cs)), row.names = kernels ); names(CV_err) <- Cs
-  
+
   for (k in kernels) {
     set_param_vec(k)
     for (c in Cs) {
@@ -148,18 +148,18 @@ fit_models <- function(kernels, Cs) {
         VAL_err[k, as.character(c)] <- res[2]
       }
     }
-    # Save errors and kernel hyperparams
-    sink('results/cross_validation.tex')
-    print(xtable(CV_err, digits = 4, align = rep('c', ncol(CV_err) + 1)))
-    sink()
-    sink('results/validation_error.tex')
-    print(xtable(VAL_err, digits = 4, align = rep('c', ncol(VAL_err) + 1)))
-    sink()
-    sink('results/train_error_partial.tex')
-    print(xtable(TR_err, digits = 4, align = rep('c', ncol(TR_err) + 1)))
-    sink()
-    sink('results/kernel_hyperparam.tex')
-    print(xtable(PARAMS, digits = 6, align = rep('c', ncol(VAL_err) + 1)))
-    sink()
   }
+  # Save errors and kernel hyperparams
+  sink('results/hyperparameter_search_error_CV.tex')
+  print(xtable(CV_err, digits = 4, align = rep('c', ncol(CV_err) + 1)))
+  sink()
+  sink('results/test_error.tex')
+  print(xtable(VAL_err, digits = 4, align = rep('c', ncol(VAL_err) + 1)))
+  sink()
+  sink('results/validation_error.tex')
+  print(xtable(TR_err, digits = 4, align = rep('c', ncol(TR_err) + 1)))
+  sink()
+  sink('results/kernel_hyperparam.tex')
+  print(xtable(PARAMS, digits = 6, align = rep('c', ncol(VAL_err) + 1)))
+  sink()
 }

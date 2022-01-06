@@ -1,0 +1,38 @@
+Confusion Matrix and Statistics
+
+                               Reference
+Prediction                      beaches bus dinosaurs elephants flowers foods
+  beaches                             1   2         0         0       0     1
+  bus                                 0   8         0         0       0     0
+  dinosaurs                           0   0        10         0       0     0
+  elephants                           2   0         0         5       0     0
+  flowers                             0   0         0         0       9     1
+  foods                               0   3         0         0       1     5
+  horses                              0   0         0         0       0     0
+  monuments                           0   0         0         1       0     1
+  mountains_and_snow                  4   2         0         1       0     0
+  peolpe_and_villages_in_Africa       0   0         0         1       0     8
+                               Reference
+Prediction                      horses monuments mountains_and_snow
+  beaches                            0         3                  3
+  bus                                0         1                  1
+  dinosaurs                          0         0                  0
+  elephants                          1         1                  1
+  flowers                            0         0                  0
+  foods                              0         0                  1
+  horses                            10         0                  0
+  monuments                          0         7                  1
+  mountains_and_snow                 0         2                  1
+  peolpe_and_villages_in_Africa      0         1                  0
+                               Reference
+Prediction                      peolpe_and_villages_in_Africa
+  beaches                                                   0
+  bus                                                       0
+  dinosaurs                                                 0
+  elephants                                                 0
+  flowers                                                   0
+  foods                                                     0
+  horses                                                    0
+  monuments                                                 0
+  mountains_and_snow                                        0
+  peolpe_and_villages_in_Africa                             0
